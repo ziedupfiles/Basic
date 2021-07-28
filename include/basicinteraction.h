@@ -14,20 +14,17 @@
 #define mattYlength 30
 #define mattXlength 32
 
-#define frontSide 29
-#define rightSide 31 // (top left = 1FF ==0,0) top right = 1A ==0,31
-
 #define percUpdate 5
-#include <ostream>
 
 class Basic
 {
 public:
     //send msgs: handsOn handsOff Leanback SitMid SitRight SitLeft SitFront SitBack
     //settings:backMin backMax HandsOnMin HandsOnMax LooseMin LooseMax TightMin TightMax right front
-    Basic(std::vector<bool> sendMsgs , int backMin , int backMax, int wheelHandsOnMin, int wheelHandsOnMax, int wheelLooseMin, int wheelLooseMax, int wheelTightMin, int wheelTightMax, int rightSideMax, int frontSideMax );
-    Basic();
+    Basic( );
+    void setVals(std::vector<bool> sendMsgs = {true,true,true,true,true,true,true,true},float backMin=15 ,float backMax=50 ,float wheelHandsOnMin=0,float wheelHandsOnMax=50,float wheelLooseMin=50,float wheelLooseMax=150,float wheelTightMin=150,float wheelTightMax=450,int rightSideMax=19,int frontSideMax=14 );
     void spin();
+
     float getMax(float tempArr [] );
     void publishMsg(std::string name, std::vector<int> vals , std::vector<int> perc);
     void wheelCallBack(const vehicle_msgs::FloatArray& msg );
@@ -41,8 +38,7 @@ public:
     std::vector<int> getSittingConf ( float arr[mattYlength][mattXlength] ); // conf : mid,right,left,front,back
     std::vector<int> getCenterOfPressure (float arr[mattYlength][mattXlength] );
     bool sendSittingMsg( float arr[mattYlength][mattXlength]  );
-std::string wheelHandsOnMaxstr;
-void setVals( std::vector<bool> sendMsgs , int backMin , int backMax, int wheelHandsOnMin, int wheelHandsOnMax, int wheelLooseMin, int wheelLooseMax, int wheelTightMin, int wheelTightMax, int rightSideMax, int frontSideMax );
+
 private:
     ros::NodeHandle n;
     ros::Publisher interactionPub;
@@ -71,9 +67,8 @@ private:
 
     int rightSideMax;
     int frontSideMax;
-    int wheelHandsOnMin; //min to get >0% handsOn
-    int  wheelHandsOnMax; //max to get 100% handson
-
+    float wheelHandsOnMin; //min to get >0% handsOn
+    float wheelHandsOnMax; //max to get 100% handson
     float wheelLooseMin; //min to get >0% handsOn
     float wheelLooseMax; //max to get 100% handsOn
     float wheelTightMin; // min to get >0% tight grip
